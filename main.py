@@ -19,13 +19,13 @@ app = FastAPI()
 llm = ChatGroq(
     temperature=0,
     api_key=api_key,
-    model_name="llama3-8b-8192"
+    model_name="llama-3.1-8b-instant"
 )
 
 fiscal_de_llm = ChatGroq(
     temperature=0.8, 
     api_key=os.getenv("GROQ_API_KEY"),
-    model_name="llama3-8b-8192"
+    model_name="llama3-70b-8192"
 )
 
 # Modelo Pydantic para a entrada JSON
