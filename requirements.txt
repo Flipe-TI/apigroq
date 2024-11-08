@@ -4,3 +4,4 @@ pandas
 langchain_experimental
 langchain_groq
 python-dotenv
+tabulate
