@@ -45,7 +45,6 @@ def agent_response(llm: ChatGroq, df: pd.DataFrame, question: str) -> str:
         df,
         prefix=agent_prompt_prefix,
         verbose=True,
-        max_iterations=5,
         allow_dangerous_code=True,
         agent_executor_kwargs={"handle_parsing_errors": True}
     )
