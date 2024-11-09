@@ -65,12 +65,12 @@ async def ask(data_input: DataInput):
         prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human)])
         chain = prompt | fiscal_de_llm
 
-        response = agent_response(llm,df,data_input.question)#chain.stream({"text": agent_response(llm,df,data_input.question)})
+        response = chain.stream({"text": agent_response(llm,df,data_input.question)})
         full_response = ""
         for partial_response in response:
             full_response += str(partial_response.content)
         
-        return {"response": response}
+        return {"response": full_response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
