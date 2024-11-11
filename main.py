@@ -54,8 +54,8 @@ def agent_response(llm: ChatGroq, df: pd.DataFrame, question: str) -> str:
 
 def agent_response_defined(llm: ChatGroq, df: pd.DataFrame, question: str) -> str:
     agent_prompt_prefix = (
-        "o dataframe consistem em pergunta e resposta, ache qual pergunta tem mais a ver com a pergunta do usuario e retorne a coluna resposta para aquela pergunta. "
-        "retorne somente a resposta mais correta."
+        "retorne somente a resposta que corresponde."
+        "o dataframe consistem em pergunta e resposta, aplique um algoritmo para encontrar a pergunta que mais se assemelha a: "
     )
 
     agent = create_pandas_dataframe_agent(
