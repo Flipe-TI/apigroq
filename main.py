@@ -52,6 +52,24 @@ def agent_response(llm: ChatGroq, df: pd.DataFrame, question: str) -> str:
     response = agent.invoke({"input": question})
     return response.get('output')
 
+def agent_response_defined(llm: ChatGroq, df: pd.DataFrame, question: str) -> str:
+    agent_prompt_prefix = (
+        "o dataframe consistem em pergunta e resposta, ache qual pergunta tem mais a ver com a pergunta do usuario e retorne a coluna resposta para aquela pergunta. "
+        "retorne somente a resposta mais correta."
+    )
+
+    agent = create_pandas_dataframe_agent(
+        llm,
+        df,
+        prefix=agent_prompt_prefix,
+        verbose=True,
+        allow_dangerous_code=True,
+        agent_executor_kwargs={"handle_parsing_errors": True}
+    )
+
+    response = agent.invoke({"input": question})
+    return response.get('output')
+
 # Endpoint para receber JSON e responder com análise da IA
 @app.post("/ask")
 async def ask(data_input: DataInput):
@@ -74,5 +92,24 @@ async def ask(data_input: DataInput):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/ask-for-your-assistant")
+async def ask(data_input: DataInput):
+    try:
+        # Criar DataFrame a partir do JSON
+        df = pd.DataFrame(data_input.data)
+
+        system = "Você é um assistente e essa é a resposta que deve passar para o usuario, seja bem didatico e criativo"
+        human = "{text}"
+        prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human)])
+        chain = prompt | fiscal_de_llm
+
+        response = chain.stream({"text": agent_response_defined(llm,df,data_input.question)})
+        full_response = ""
+        for partial_response in response:
+            full_response += str(partial_response.content)
+        
+        return {"response": full_response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
