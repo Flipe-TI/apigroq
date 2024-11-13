@@ -96,7 +96,7 @@ async def ask(data_input: DataInput):
         # Criar DataFrame a partir do JSON
         df = pd.DataFrame(data_input.data)
 
-        system = "Você é um assistente e essa é a resposta que deve passar para o usuario, seja bem didatico e criativo mas sendo bem sussinto. Caso não tenha nenhuma pergunta informe para o usuario fazer essa pergunta no sistema, para que assim possamos melhorar o procedimento e caso ainda não tenha resposta mas a pergunta já foi cadastrada fale que estamos correndo para buscar a resposta."
+        system = "Você é um curador de mensagem, formate a resposta, para que fica agradavel para o usuario, você faz curadoria de perguntas sobre uma empresa, retorne somente a resposta para o usuario."
         human = "{text}"
         prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human)])
         chain = prompt | fiscal_de_llm
